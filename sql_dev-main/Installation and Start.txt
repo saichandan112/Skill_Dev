@@ -1,0 +1,41 @@
+PostgreSQL Installation and Database Setup Steps
+
+Step 1: Install PostgreSQL
+
+Download PostgreSQL (latest version).
+Run the installer.
+During installation:
+
+Keep Port = 5432
+Set a password (remember it)
+Keep all other settings as default
+
+On final screen:
+
+Uncheck Stack Builder
+Click Finish
+
+Step 2: Open pgAdmin
+
+Open pgAdmin
+In left panel:
+
+Expand Servers
+Click PostgreSQL
+
+Enter your password
+
+Step 3: Create Database
+
+Right click:
+Databases → Create → Database
+
+Enter name:
+sql_practice
+
+Click Save
+
+Step 4: Open Query Tool
+
+Right click:
+sql_practice → Query Tool

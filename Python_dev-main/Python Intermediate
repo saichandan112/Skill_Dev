@@ -1,0 +1,70 @@
+#Lists in python
+'''
+fruits = ["Apple", "Banana", "Orange"]
+
+print(fruits[0])
+
+
+
+name = "Python"
+print(name.upper())                         #PYTHON
+print(name.lower())                         #python
+print(name.replace("n", "J"))               #PythoJ
+print(name.split("n"))                      #['Pytho', '']
+
+
+
+#checking palindrome
+
+text = input("Enter :")
+
+if text == text[::-1]:
+    print("Palindrome")
+else:
+    print("Not Palindrome")
+    
+
+# Reversing a string 
+
+text = input("Enter :")                         #Take input from user
+reversed_text = text[::-1]                      #reverse the string using slicing
+print("Reversed string:", reversed_text)        #Prints the reversed string
+    
+
+#Reversing List 
+
+List = input("Enter:").split()     
+reverse_list = List[::-1]
+print(reverse_list)
+
+'''
+
+#Challenge (Length of list,palindrome,reverse list)
+
+list = input("Enter :").split()
+
+print("Lenght of list:", len(list))
+
+
+reversed_list = list[::-1]
+
+if list == reversed_list:
+    print("palindrome")
+else:
+    print("Not palindrome")    
+
+print("Reversed list:", reversed_list)
+
+#Print only vowels in a string.
+
+text = input("Enter :")
+vowels = "aeiouAEIOU"
+
+for char in text:
+    if char in vowels:
+        print(char, "is a vowel")
+        
+        
+        
+
+
