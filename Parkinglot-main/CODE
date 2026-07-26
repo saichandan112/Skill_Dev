@@ -1,0 +1,311 @@
+"""
+PARKING LOT SYSTEM — Clean OOP Python
+=======================================
+For beginners. Every concept is explained step by step.
+"""
+
+# ============================================================
+# STEP 1: IMPORTS
+# ============================================================
+from datetime import datetime   # To record entry and exit times
+
+
+# ============================================================
+# STEP 2: VEHICLE CLASS
+# ============================================================
+
+class Vehicle:
+    """
+    Represents any vehicle entering the parking lot.
+    We store the plate number and figure out the type from it.
+    """
+
+    def __init__(self, plate):
+        self.plate = plate.upper()                      # Store plate in uppercase
+        self.type  = self._identify_type()              # Auto-detect type from plate
+        self.size  = self._get_size()                   # Size based on type
+
+    def _identify_type(self):
+        """
+        Reads the plate and returns the vehicle type.
+        Rules:
+          - Plate contains BIKE, MC, MOTO  → Motorcycle
+          - Plate contains TRK, TRUCK      → Truck
+          - Everything else                → Car
+        """
+        if "BIKE" in self.plate or "MC" in self.plate or "MOTO" in self.plate:
+            return "Motorcycle"
+        elif "TRK" in self.plate or "TRUCK" in self.plate:
+            return "Truck"
+        else:
+            return "Car"
+
+    def _get_size(self):
+        """Maps vehicle type to a size string."""
+        if self.type == "Motorcycle":
+            return "Small"
+        elif self.type == "Car":
+            return "Medium"
+        else:
+            return "Large"
+
+
+# ============================================================
+# STEP 3: PARKING SPOT CLASS
+# ============================================================
+
+class ParkingSpot:
+    """
+    Represents one physical parking spot in the lot.
+    It knows its ID, what size vehicle fits, and if it's available.
+    """
+
+    def __init__(self, spot_id, size):
+        self.spot_id     = spot_id   # e.g. "C1", "R3", "O2"
+        self.size        = size      # "Small", "Medium", or "Large"
+        self.is_available     = True      # True = available
+        self.parked_plate = None     # Which plate is currently parked here
+
+    def park(self, plate):
+        """Mark this spot as occupied."""
+        self.is_available      = False
+        self.parked_plate = plate
+
+    def leave(self):
+        """Mark this spot as available again."""
+        self.is_available      = True
+        self.parked_plate = None
+
+
+# ============================================================
+# STEP 4: TICKET CLASS
+# ============================================================
+
+class Ticket:
+    """
+    Issued when a vehicle enters.
+    Stores entry time and the spot assigned.
+    Used later to calculate the parking fee.
+    """
+
+    def __init__(self, plate, spot_id, vehicle_type, size):
+        self.plate        = plate
+        self.spot_id      = spot_id
+        self.vehicle_type = vehicle_type
+        self.size         = size
+        self.entry_time   = datetime.now()   # Auto-capture current time
+        self.exit_time    = None             # Will be set when vehicle exits
+
+    def duration_in_minutes(self):
+        """How long has the vehicle been parked? (in minutes)"""
+        end = self.exit_time if self.exit_time else datetime.now()
+        diff = end - self.entry_time                # timedelta object
+        minutes = diff.total_seconds() / 60         # Convert seconds → minutes
+        return max(1, round(minutes, 1))            # Minimum 1 minute
+
+    def calculate_fare(self):
+        """
+        Fare = rate per minute × duration
+        Rates:
+          Motorcycle (Small)  → Rs. 1 per minute
+          Car        (Medium) → Rs. 2 per minute
+          Truck      (Large)  → Rs. 3 per minute
+        """
+        rates = {"Small": 1, "Medium": 2, "Large": 3}
+        rate  = rates[self.size]
+        return rate * self.duration_in_minutes()
+
+
+# ============================================================
+# STEP 5: PARKING LOT CLASS
+# ============================================================
+
+class ParkingLot:
+    """
+    The main class that runs everything.
+    - Holds all parking spots
+    - Issues tickets on entry
+    - Calculates fare on exit
+    - Shows lot status
+    """
+
+    def __init__(self):
+        self.spots          = self._create_spots()   # List of all ParkingSpot objects
+        self.active_tickets = {}                     # { plate: Ticket }
+
+    def _create_spots(self):
+        """
+        Create the spots for the parking lot.
+        5 Small (C1–C5), 5 Medium (R1–R5), 3 Large (O1–O3)
+        C = Compact, R = Regular, O = Oversized
+        """
+        spots = []
+        for i in range(1, 6):
+            spots.append(ParkingSpot(f"C{i}", "Small"))
+        for i in range(1, 6):
+            spots.append(ParkingSpot(f"R{i}", "Medium"))
+        for i in range(1, 4):
+            spots.append(ParkingSpot(f"O{i}", "Large"))
+        return spots
+
+    def _find_spot(self, size):
+        """
+        Find the first available spot that fits the vehicle size.
+        Size order: Small → Medium → Large
+        If no Small spot is available, a motorcycle can overflow to Medium.
+        """
+        size_order = ["Small", "Medium", "Large"]
+        start      = size_order.index(size)          # Start from required size
+
+        for s in size_order[start:]:                 # Try required size first, then bigger
+            for spot in self.spots:
+                if spot.size == s and spot.is_available:
+                    return spot                      # Return first available match
+
+        return None                                  # No spot found
+
+    def enter(self, plate):
+        """
+        Vehicle arrives. Steps:
+        1. Create Vehicle object from plate
+        2. Find a available spot
+        3. Issue a Ticket
+        4. Mark spot as occupied
+        """
+        plate = plate.upper().strip()
+
+        # Already parked?
+        if plate in self.active_tickets:
+            print(f"\n  ⚠  {plate} is already parked!")
+            return
+
+        vehicle = Vehicle(plate)                         # Auto-detects type & size
+        spot    = self._find_spot(vehicle.size)          # Find a suitable spot
+
+        if spot is None:
+            print(f"\n  ✗  No spot available for {vehicle.type}. Lot is full!")
+            return
+
+        # Issue ticket
+        ticket = Ticket(plate, spot.spot_id, vehicle.type, vehicle.size)
+        self.active_tickets[plate] = ticket              # Save ticket
+
+        # Occupy the spot
+        spot.park(plate)
+
+        # Print receipt
+        print()
+        print("  ┌─────────────────────────────────────┐")
+        print("  │           PARKING TICKET            │")
+        print("  ├─────────────────────────────────────┤")
+        print(f"  │  Plate   : {plate:<26}│")
+        print(f"  │  Type    : {vehicle.type:<26}│")
+        print(f"  │  Spot    : {spot.spot_id:<26}│")
+        print(f"  │  Time In : {ticket.entry_time.strftime('%I:%M %p'):<26}│")
+        print("  └─────────────────────────────────────┘")
+
+    def exit(self, plate):
+        """
+        Vehicle leaves. Steps:
+        1. Find the ticket by plate
+        2. Set exit time
+        3. Calculate fare
+        4. available the spot
+        5. Print receipt
+        """
+        plate = plate.upper().strip()
+
+        if plate not in self.active_tickets:
+            print(f"\n  ✗  No ticket found for {plate}.")
+            return
+
+        ticket = self.active_tickets.pop(plate)          # Remove from active list
+        ticket.exit_time = datetime.now()                # Record exit time
+
+        # available the spot
+        for spot in self.spots:
+            if spot.spot_id == ticket.spot_id:
+                spot.leave()
+                break
+
+        fare     = ticket.calculate_fare()
+        duration = ticket.duration_in_minutes()
+
+        print()
+        print("  ┌─────────────────────────────────────┐")
+        print("  │            EXIT RECEIPT             │")
+        print("  ├─────────────────────────────────────┤")
+        print(f"  │  Plate    : {plate:<25}│")
+        print(f"  │  Type     : {ticket.vehicle_type:<25}│")
+        print(f"  │  Spot     : {ticket.spot_id:<25}│")
+        print(f"  │  Time In  : {ticket.entry_time.strftime('%I:%M %p'):<25}│")
+        print(f"  │  Time Out : {ticket.exit_time.strftime('%I:%M %p'):<25}│")
+        print(f"  │  Duration : {str(duration) + ' min':<25}│")
+        print(f"  │  FARE     : Rs. {str(fare):<22}│")
+        print("  └─────────────────────────────────────┘")
+
+    def status(self):
+        """Show all spots and their current state."""
+        print()
+        print("  ── PARKING LOT STATUS ──────────────────")
+        print(f"  {'Spot':<6}  {'Size':<8}  {'Status'}")
+        print("  " + "─" * 35)
+        for spot in self.spots:
+            state = spot.parked_plate if not spot.is_available else "available"
+            print(f"  {spot.spot_id:<6}  {spot.size:<8}  {state}")
+
+        total    = len(self.spots)
+        occupied = sum(1 for s in self.spots if not s.is_available)
+        available     = total - occupied
+        print()
+        print(f"  Total: {total}  |  Occupied: {occupied}  |  available: {available}")
+
+
+# ============================================================
+# STEP 6: MAIN MENU
+# ============================================================
+
+def main():
+    lot = ParkingLot()   # Create the parking lot (one instance runs the whole system)
+
+    print()
+    print("  ════════════════════════════════════════")
+    print("       PARKING LOT MANAGEMENT SYSTEM     ")
+    print("  ════════════════════════════════════════")
+    print("  Plate tip:")
+    print("    BIKE / MC / MOTO  in plate → Motorcycle")
+    print("    TRK / TRUCK       in plate → Truck")
+    print("    Anything else              → Car")
+    print("  ════════════════════════════════════════")
+
+    while True:
+        print()
+        print("  1.  Vehicle Entry")
+        print("  2.  Vehicle Exit")
+        print("  3.  View Lot Status")
+        print("  4.  Quit")
+        print()
+
+        choice = input("  Your choice: ").strip()
+
+        if choice == "1":
+            plate = input("  Enter number plate: ").strip()
+            lot.enter(plate)
+
+        elif choice == "2":
+            plate = input("  Enter number plate: ").strip()
+            lot.exit(plate)
+
+        elif choice == "3":
+            lot.status()
+
+        elif choice == "4":
+            print("\n  Thank you for using the Parking Lot Management System!\n")
+            break
+
+        else:
+            print("  Please choose 1, 2, 3 or 4.")
+
+
+if __name__ == "__main__":
+    main()

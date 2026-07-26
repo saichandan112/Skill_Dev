@@ -1,0 +1,31 @@
+🚗 Parking Lot System (Python | OOP)
+📌 Overview
+This project is a Parking Lot Management System implemented in Java using Object-Oriented Programming (OOP) principles. It is part of my learning journey to understand how real-world systems can be designed using clean, modular, and scalable code.
+🎯 Objective
+The primary goals of this project are:
+
+To apply core OOP concepts in a practical scenario
+To model a real-world parking system
+To improve problem-solving and system design skills
+To track and showcase my learning progress
+
+⚙️ Features
+
+Create and manage parking slots
+Park and unpark vehicles
+Support multiple vehicle types (Car, Bike, Truck, etc.)
+Track available and occupied slots
+Structured and modular class design
+
+🧠 OOP Concepts Used
+
+Classes & Objects
+Encapsulation
+Inheritance (Vehicle types)
+Polymorphism
+Abstraction
+
+🛠️ Tech Stack
+
+Language: Python
+IDE: VS Code 

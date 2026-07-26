@@ -1,0 +1,45 @@
+Everything works cleanly.
+
+---
+
+## The 4 classes and what each one does
+
+```
+Vehicle       →  knows the plate, figures out type & size
+ParkingSpot   →  one physical spot, knows if it's free
+Ticket        →  records entry time, calculates fare
+ParkingLot    →  the boss — manages everything
+```
+
+---
+
+## Sample run
+
+```
+Enter number plate: MH01AB1234
+┌─────────────────────────────────────┐
+│  Plate   : MH01AB1234               │
+│  Type    : Car                      │
+│  Spot    : R1                       │
+│  Time In : 02:23 PM                 │
+└─────────────────────────────────────┘
+
+Enter number plate: MH01AB1234
+┌─────────────────────────────────────┐
+│  Duration : 45 min                  │
+│  FARE     : Rs. 90                  │
+└─────────────────────────────────────┘
+```
+
+---
+
+## OOP concepts used (beginner map)
+
+| Concept | Where you see it |
+|---|---|
+| **Class** | `Vehicle`, `ParkingSpot`, `Ticket`, `ParkingLot` |
+| **Object** | `Vehicle("MH01AB1234")` creates one vehicle object |
+| **`__init__`** | Constructor — runs automatically when object is created |
+| **`self`** | The object referring to itself |
+| **Method** | Functions inside a class like `enter()`, `exit()` |
+| **Encapsulation** | Each class manages its own data (spot manages its own free/occupied state) |
