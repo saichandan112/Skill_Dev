@@ -1,5 +1,5 @@
 # =====================================================
-# BOOKMYSHOW TICKET BOOKING APPLICATION
+# BOOKMYTICKETs TICKET BOOKING APPLICATION
 # =====================================================
 # Concepts Covered:
 #
