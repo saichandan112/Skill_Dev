@@ -48,6 +48,8 @@ class SeatStatus(Enum):
 # B1 -> ₹300
 # =====================================================
 
+#This class represents a seat in the theatre. It has a constructor that takes the seat ID and price as arguments and initializes the seat's status to AVAILABLE. The Seat class uses the SeatStatus enum to represent the status of the seat.
+
 class Seat:
 
     # Constructor
@@ -73,6 +75,8 @@ class Seat:
 # Movie("Interstellar")
 # =====================================================
 
+#This class represents a movie. It has a constructor that takes the movie name as an argument and stores it in an instance variable.
+
 class Movie:
 
     def __init__(self, movie_name):
@@ -92,6 +96,8 @@ class Movie:
 #
 # Every movie gets its own seats.
 # =====================================================
+
+#This class represents a show of a movie. It contains the movie object and a dictionary of seats. Each seat is represented by a Seat object, which has a seat ID, price, and status (available or booked). The Show class also has a method to display available seats.
 
 class Show:
 
