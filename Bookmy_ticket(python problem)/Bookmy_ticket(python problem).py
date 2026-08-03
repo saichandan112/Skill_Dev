@@ -152,6 +152,8 @@ class Show:
 # Responsible for booking seats.
 # =====================================================
 
+#This class is responsible for booking seats. It has a class variable `booking_id` that keeps track of the booking ID for each booking. The `book_ticket` class method takes a show object and a list of seat IDs as arguments, checks if the seats are available, marks them as booked, and displays the booking details.
+
 class BookingService:
 
     # Class Variable
@@ -231,6 +233,8 @@ class BookingService:
 # =====================================================
 # Program execution starts here.
 # =====================================================
+
+#This is the main function that serves as the entry point of the application. It creates movie and show objects, displays a menu to the user, and handles user input for viewing movies, booking tickets, and exiting the application.
 
 def main():
 
