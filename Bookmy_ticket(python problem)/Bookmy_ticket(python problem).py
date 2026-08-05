@@ -1,12 +1,37 @@
+# =====================================================
+# BOOKMYTICKETs TICKET BOOKING APPLICATION
+# =====================================================
+# This simplified ticket booking app uses classes to
+# represent movies, shows, seats, and booking logic.
+# All comments are preserved and easy to follow.
+# =====================================================
+
 from dataclasses import dataclass
 from enum import Enum
 
 
+# =====================================================
+# STATUS ENUM
+# =====================================================
+# Seat can be either AVAILABLE or BOOKED.
+# =====================================================
+
+#This Enum class represents the status of a seat in the theatre.
 class SeatStatus(Enum):
     AVAILABLE = "Available"
     BOOKED = "Booked"
 
 
+
+# =====================================================
+# SEAT CLASS
+# =====================================================
+# Represents one seat in the theatre.
+# Seat has an ID, a price, and a status.
+# =====================================================
+
+# This dataclass represents a seat in the theatre with its ID, price, and status.
+#@dataclass means that the class will automatically generate special methods like __init__() and __repr__() based on the defined attributes.,we use SeatStatus Enum to represent the status of the seat, which can be either AVAILABLE or BOOKED.
 @dataclass
 class Seat:
     seat_id: str
@@ -14,22 +39,34 @@ class Seat:
     status: SeatStatus = SeatStatus.AVAILABLE
 
 
+# =====================================================
+# MOVIE CLASS
+# =====================================================
+# Represents a movie by its name.
+# =====================================================
 @dataclass
 class Movie:
     movie_name: str
 
 
+# =====================================================
+# SHOW CLASS
+# =====================================================
+# Represents one show of a movie and its seats.
+# =====================================================
 class Show:
     def __init__(self, movie: Movie):
         self.movie = movie
         self.seats = self._create_seats()
 
+    # Create the seat layout for this show.
     def _create_seats(self) -> dict[str, Seat]:
         return {
             **{f"A{i}": Seat(f"A{i}", 200) for i in range(1, 4)},
             **{f"B{i}": Seat(f"B{i}", 300) for i in range(1, 4)},
         }
 
+    # Display only seats that are still available.
     def display_available_seats(self) -> None:
         print("\nAvailable Seats")
         for seat in self.seats.values():
@@ -37,6 +74,11 @@ class Show:
                 print(f"{seat.seat_id} - ₹{seat.price}")
 
 
+# =====================================================
+# BOOKING SERVICE
+# =====================================================
+# Handles booking seats and generating booking IDs.
+# =====================================================
 class BookingService:
     booking_id = 1
 
@@ -73,6 +115,12 @@ class BookingService:
         return True
 
 
+# =====================================================
+# INPUT HELPERS
+# =====================================================
+# These helper functions keep the menu input logic clean.
+# =====================================================
+
 def choose_option(prompt: str, valid_choices: list[str]) -> str:
     while True:
         choice = input(prompt).strip()
@@ -99,6 +147,12 @@ def choose_movie(movies: list[Movie]) -> Movie:
 def parse_seat_ids(seat_input: str) -> list[str]:
     return [seat.strip().upper() for seat in seat_input.split(",") if seat.strip()]
 
+
+# =====================================================
+# MAIN FUNCTION
+# =====================================================
+# Entry point for the application.
+# =====================================================
 
 def main() -> None:
     movies = [Movie("Interstellar"), Movie("Inception"), Movie("Titanic")]
@@ -143,5 +197,8 @@ def main() -> None:
             break
 
 
+# =====================================================
+# ENTRY POINT
+# =====================================================
 if __name__ == "__main__":
     main()
