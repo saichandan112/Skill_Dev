@@ -1,444 +1,147 @@
-# =====================================================
-# BOOKMYTICKETs TICKET BOOKING APPLICATION
-# =====================================================
-# Concepts Covered:
-#
-# 1. Classes and Objects
-# 2. Constructors (__init__)
-# 3. Enum
-# 4. Dictionary
-# 5. List
-# 6. Loops
-# 7. Conditional Statements
-# 8. User Input
-# 9. Class Methods
-# 10. Class Variables
-# =====================================================
-
-
-# Import Enum so that we can create constant values
+from dataclasses import dataclass
 from enum import Enum
 
-
-# =====================================================
-# ENUM
-# =====================================================
-# Enum is used when we have a fixed set of values.
-#
-# Instead of:
-# seat.status = "BOOKED"
-#
-# We use:
-# seat.status = SeatStatus.BOOKED
-#
-# This avoids spelling mistakes.
-# =====================================================
 
 class SeatStatus(Enum):
     AVAILABLE = "Available"
     BOOKED = "Booked"
 
 
-# =====================================================
-# SEAT CLASS
-# =====================================================
-# Represents one seat in the theatre.
-# Example:
-# A1 -> ₹200
-# B1 -> ₹300
-# =====================================================
-
-#This class represents a seat in the theatre. It has a constructor that takes the seat ID and price as arguments and initializes the seat's status to AVAILABLE. The Seat class uses the SeatStatus enum to represent the status of the seat.
-
+@dataclass
 class Seat:
-
-    # Constructor
-    # Automatically called when object is created
-    def __init__(self, seat_id, price):
-
-        # Store seat number
-        self.seat_id = seat_id
-
-        # Store seat price
-        self.price = price
-
-        # Every seat starts as AVAILABLE
-        self.status = SeatStatus.AVAILABLE
+    seat_id: str
+    price: int
+    status: SeatStatus = SeatStatus.AVAILABLE
 
 
-# =====================================================
-# MOVIE CLASS
-# =====================================================
-# Represents a movie.
-#
-# Example:
-# Movie("Interstellar")
-# =====================================================
-
-#This class represents a movie. It has a constructor that takes the movie name as an argument and stores it in an instance variable.
-
+@dataclass
 class Movie:
+    movie_name: str
 
-    def __init__(self, movie_name):
-
-        # Store movie name
-        self.movie_name = movie_name
-
-
-# =====================================================
-# SHOW CLASS
-# =====================================================
-# Represents one show of a movie.
-#
-# A show contains:
-# 1. Movie
-# 2. Seats
-#
-# Every movie gets its own seats.
-# =====================================================
-
-#This class represents a show of a movie. It contains the movie object and a dictionary of seats. Each seat is represented by a Seat object, which has a seat ID, price, and status (available or booked). The Show class also has a method to display available seats.
 
 class Show:
-
-    def __init__(self, movie):
-
-        # Store movie object
+    def __init__(self, movie: Movie):
         self.movie = movie
+        self.seats = self._create_seats()
 
-        # Dictionary
-        #
-        # Key   -> Seat ID
-        # Value -> Seat Object
-        #
-        # Example:
-        # {
-        #   "A1": Seat Object,
-        #   "A2": Seat Object
-        # }
-        #
-        self.seats = {
-
-            "A1": Seat("A1", 200),
-            "A2": Seat("A2", 200),
-            "A3": Seat("A3", 200),
-
-            "B1": Seat("B1", 300),
-            "B2": Seat("B2", 300),
-            "B3": Seat("B3", 300)
+    def _create_seats(self) -> dict[str, Seat]:
+        return {
+            **{f"A{i}": Seat(f"A{i}", 200) for i in range(1, 4)},
+            **{f"B{i}": Seat(f"B{i}", 300) for i in range(1, 4)},
         }
 
-    # =================================================
-    # DISPLAY AVAILABLE SEATS
-    # =================================================
-    def display_seats(self):
-
+    def display_available_seats(self) -> None:
         print("\nAvailable Seats")
-
-        # Loop through all seat objects
         for seat in self.seats.values():
-
-            # Show only available seats
             if seat.status == SeatStatus.AVAILABLE:
+                print(f"{seat.seat_id} - ₹{seat.price}")
 
-                print(
-                    f"{seat.seat_id} - ₹{seat.price}"
-                )
-
-
-# =====================================================
-# BOOKING SERVICE
-# =====================================================
-# Responsible for booking seats.
-# =====================================================
-
-#This class is responsible for booking seats. It has a class variable `booking_id` that keeps track of the booking ID for each booking. The `book_ticket` class method takes a show object and a list of seat IDs as arguments, checks if the seats are available, marks them as booked, and displays the booking details.
 
 class BookingService:
-
-    # Class Variable
-    #
-    # Shared across all bookings.
-    #
-    # First Booking  -> BK1
-    # Second Booking -> BK2
-    #
     booking_id = 1
 
-    # Class Method
-    # cls refers to class itself
     @classmethod
-    def book_ticket(cls, show, seat_ids):
-
-        # Stores selected seat objects
-        selected = []
-
-        # Stores total ticket price
+    def book_ticket(cls, show: Show, seat_ids: list[str]) -> bool:
+        selected_seats = []
         total = 0
 
-        # Loop through seat numbers entered by user
         for seat_id in seat_ids:
-
-            # Check if seat exists
             if seat_id not in show.seats:
+                print(f"{seat_id} is invalid.")
+                return False
 
-                print(f"{seat_id} is invalid")
-                return
-
-            # Get seat object
             seat = show.seats[seat_id]
-
-            # Check if already booked
             if seat.status == SeatStatus.BOOKED:
+                print(f"{seat_id} is already booked.")
+                return False
 
-                print(f"{seat_id} already booked")
-                return
-
-            # Add seat into selected list
-            selected.append(seat)
-
-            # Calculate total amount
+            selected_seats.append(seat)
             total += seat.price
 
-        # Mark selected seats as booked
-        for seat in selected:
+        for seat in selected_seats:
             seat.status = SeatStatus.BOOKED
 
-        # Show booking details
+        seat_display = ", ".join(seat_ids)
         print("\nBooking Successful")
         print("---------------------------")
+        print(f"Booking ID : BK{cls.booking_id}")
+        print(f"Movie      : {show.movie.movie_name}")
+        print(f"Seats      : {seat_display}")
+        print(f"Amount     : ₹{total}")
 
-        print(
-            f"Booking ID : BK{cls.booking_id}"
-        )
-
-        print(
-            f"Movie      : {show.movie.movie_name}"
-        )
-
-        print(
-            f"Seats      : {seat_ids}"
-        )
-
-        print(
-            f"Amount     : ₹{total}"
-        )
-
-        # Increment booking id
         cls.booking_id += 1
+        return True
 
 
-# =====================================================
-# MAIN FUNCTION
-# =====================================================
-# Program execution starts here.
-# =====================================================
+def choose_option(prompt: str, valid_choices: list[str]) -> str:
+    while True:
+        choice = input(prompt).strip()
+        if choice in valid_choices:
+            return choice
+        print("Invalid choice. Please try again.")
 
-#This is the main function that serves as the entry point of the application. It creates movie and show objects, displays a menu to the user, and handles user input for viewing movies, booking tickets, and exiting the application.
 
-def main():
-
-    # ================================================
-    # CREATE MOVIES
-    # ================================================
-
-    movies = [
-
-        Movie("Interstellar"),
-
-        Movie("Inception"),
-
-        Movie("Titanic")
-
-    ]
-
-    # ================================================
-    # CREATE SHOWS
-    # ================================================
-    # Dictionary:
-    #
-    # {
-    #   "Interstellar": ShowObject,
-    #   "Inception": ShowObject
-    # }
-    #
-    # ================================================
-
-    shows = {}
-
-    for movie in movies:
-
-        shows[movie.movie_name] = Show(movie)
-
-    # ================================================
-    # MENU LOOP
-    # ================================================
-    # Runs forever until user chooses Exit
-    # ================================================
+def choose_movie(movies: list[Movie]) -> Movie:
+    print("\nSelect Movie")
+    for index, movie in enumerate(movies, start=1):
+        print(f"{index}. {movie.movie_name}")
 
     while True:
+        try:
+            movie_number = int(input("\nEnter Movie Number: ").strip())
+            if 1 <= movie_number <= len(movies):
+                return movies[movie_number - 1]
+        except ValueError:
+            pass
+        print("Invalid movie number. Please enter a valid number.")
 
+
+def parse_seat_ids(seat_input: str) -> list[str]:
+    return [seat.strip().upper() for seat in seat_input.split(",") if seat.strip()]
+
+
+def main() -> None:
+    movies = [Movie("Interstellar"), Movie("Inception"), Movie("Titanic")]
+    shows = {movie.movie_name: Show(movie) for movie in movies}
+
+    while True:
         print("\n==============================")
         print("      BOOKMYTICKETs APP")
         print("==============================")
-
         print("1. View Movies")
         print("2. Book Ticket")
         print("3. Exit")
 
-        # Read user choice
-        choice = input(
-            "\nEnter Choice : "
-        )
+        choice = choose_option("\nEnter Choice: ", ["1", "2", "3"])
 
-        # ============================================
-        # VIEW MOVIES
-        # ============================================
         if choice == "1":
-
             print("\nAvailable Movies")
+            for index, movie in enumerate(movies, start=1):
+                print(f"{index}. {movie.movie_name}")
 
-            # enumerate gives index + value
-            for i, movie in enumerate(
-                    movies,
-                    start=1):
-
-                print(
-                    i,
-                    movie.movie_name
-                )
-
-        # ============================================
-        # BOOK TICKET
-        # ============================================
         elif choice == "2":
+            selected_movie = choose_movie(movies)
+            selected_show = shows[selected_movie.movie_name]
+            selected_show.display_available_seats()
 
-            print("\nSelect Movie")
-
-            for i, movie in enumerate(
-                    movies,
-                    start=1):
-
-                print(
-                    i,
-                    movie.movie_name
-                )
-
-            # Take movie number
-            movie_choice = int(
-
-                input(
-                    "\nEnter Movie Number : "
-                )
-
-            )
-
-            # Convert numbered choice into list index
-            #
-            # User enters 1
-            # Python index is 0
-            #
-            selected_movie = movies[
-                movie_choice - 1
-            ]
-
-            # Get corresponding show
-            selected_show = shows[
-                selected_movie.movie_name
-            ]
-
-            # Display available seats
-            selected_show.display_seats()
-
-            # ========================================
-            # SEAT INPUT
-            # ========================================
-            #
-            # Example:
-            # A1,B2
-            #
-            # ========================================
-
-            seat_input = input(
-                "\nEnter Seats "
-                "(comma separated): "
-            )
-
-            # Convert String to List
-            #
-            # "A1,B2"
-            #
-            # becomes
-            #
-            # ['A1', 'B2']
-            #
-            seat_ids = [
-
-                seat.strip().upper()
-
-                for seat in seat_input.split(",")
-
-            ]
-
-            # ========================================
-            # PAYMENT SECTION
-            # ========================================
+            seat_ids = parse_seat_ids(input("\nEnter Seats (comma separated): "))
+            if not seat_ids:
+                print("No seats selected.")
+                continue
 
             print("\nPayment Options")
             print("1. UPI")
             print("2. Card")
+            payment_choice = choose_option("\nChoose Payment Method: ", ["1", "2"])
+            payment_method = "UPI" if payment_choice == "1" else "Card"
+            print(f"\n{payment_method} Payment Successful")
 
-            payment_choice = input(
-                "\nChoose Payment Method : "
-            )
+            BookingService.book_ticket(selected_show, seat_ids)
 
-            if payment_choice == "1":
-
-                print(
-                    "\nUPI Payment Successful"
-                )
-
-            else:
-
-                print(
-                    "\nCard Payment Successful"
-                )
-
-            # Call booking service
-            BookingService.book_ticket(
-
-                selected_show,
-
-                seat_ids
-
-            )
-
-        # ============================================
-        # EXIT
-        # ============================================
-        elif choice == "3":
-
-            print("\nThank You")
-
-            # Stop menu loop
+        else:
+            print("\nThank you.")
             break
 
-        # ============================================
-        # INVALID OPTION
-        # ============================================
-        else:
-
-            print(
-                "\nInvalid Choice"
-            )
-
-
-# =====================================================
-# ENTRY POINT
-# =====================================================
-# This ensures execution starts from main()
-# =====================================================
 
 if __name__ == "__main__":
-
     main()
