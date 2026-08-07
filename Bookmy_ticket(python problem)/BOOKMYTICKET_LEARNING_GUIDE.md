@@ -399,3 +399,4 @@ This guide turns the script into a full beginner learning resource.
 - You understand the Python features used.
 - You have ideas for next exercises.
 - The app is a great foundation for learning how to build interactive Python programs.
+

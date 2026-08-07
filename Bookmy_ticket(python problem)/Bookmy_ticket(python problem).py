@@ -202,3 +202,7 @@ def main() -> None:
 # =====================================================
 if __name__ == "__main__":
     main()
+
+#This main function serves as the entry point for the application. 
+#It initializes a list of movies and their corresponding shows, then enters a loop to display the main menu. Users can view available movies, book tickets, or exit the application.
+#The booking process includes selecting a movie, displaying available seats, choosing seats, selecting a payment method, and confirming the booking.
