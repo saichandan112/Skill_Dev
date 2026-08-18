@@ -1,16 +1,6 @@
-import pyautogui
-import os
+"""Compatibility wrapper for screenshot capture."""
+from modules.screenshot_manager import ScreenshotManager
 
-def capture_screenshot(ticket_id, step_no):
 
-    folder = f"screenshots/{ticket_id}"
-
-    os.makedirs(folder, exist_ok=True)
-
-    path = f"{folder}/step_{step_no}.png"
-
-    screenshot = pyautogui.screenshot()
-
-    screenshot.save(path)
-
-    return path
+def capture_screenshot(destination_directory, step_number, delay_seconds=3):
+    return ScreenshotManager(destination_directory).capture_full_screen(step_number, delay_seconds)
