@@ -1,0 +1,22 @@
+Ticket Resolution Assistant
+│
+├── Enter Ticket ID
+│
+├── Select Issue Type
+│    ├── RegWeb
+│    ├── W4 Forms
+│    ├── Job Failure
+│    ├── YTD
+│    └── Others
+│
+├── Display Resolution Checklist
+│
+├── User Completes Step
+│      │
+│      ├── Mark as Done
+│      ├── Screenshot Captured
+│      └── Added to Evidence DOC
+│
+├── Next Step Unlocked
+│
+└── Generate Final Report
