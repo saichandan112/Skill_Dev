@@ -1,0 +1,38 @@
+{
+  "RegWeb": [
+    "Review ticket details",
+    "Verify RegWeb Application Status",
+    "Check Error Logs",
+    "Validate User Impact",
+    "Perform Resolution",
+    "Validate Resolution",
+    "Update Ticket"
+  ],
+
+  "W4 Forms": [
+    "Review Ticket",
+    "Verify W4 Form Status",
+    "Check Processing Logs",
+    "Validate Employee Data",
+    "Apply Fix",
+    "Post Validation",
+    "Update Ticket"
+  ],
+
+  "Job Failure": [
+    "Check Batch Job",
+    "Verify Dependencies",
+    "Check Job Logs",
+    "Restart Job",
+    "Validate Completion",
+    "Update Ticket"
+  ],
+
+  "YTD": [
+    "Review Request",
+    "Verify Payroll Data",
+    "Check YTD Generation",
+    "Validate Results",
+    "Update Ticket"
+  ]
+}
