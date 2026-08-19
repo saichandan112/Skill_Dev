@@ -174,3 +174,53 @@ class Database:
                         (ticket_id, number, name, guidance),
                     )
                 self.audit(ticket_id, "TICKET_CREATED", f"Ticket created as {ticket_type}", commit=False)
+                def steps(self, ticket_id):
+                        return self.conn.execute(
+                            "SELECT * FROM steps WHERE ticket_id=? ORDER BY step_no", (ticket_id,)
+                        ).fetchall()
+                
+                    def set_evidence(self, ticket_id, step_no, path):
+                        with self.conn:
+                            self.conn.execute(
+                                "UPDATE steps SET evidence_path=? WHERE ticket_id=? AND step_no=?",
+                                (str(path), ticket_id, step_no),
+                            )
+                            self.audit(ticket_id, "EVIDENCE_ATTACHED", f"Step {step_no}: {Path(path).name}", commit=False)
+                
+                    def complete_step(self, ticket_id, step_no):
+                        steps = self.steps(ticket_id)
+                        target = next(row for row in steps if row["step_no"] == step_no)
+                        if target["completed"]:
+                            return
+                        pending_before = [row for row in steps if row["step_no"] < step_no and not row["completed"]]
+                        if pending_before:
+                            raise ValueError(f"Complete Step {pending_before[0]['step_no']} first.")
+                        if REQUIRE_EVIDENCE and not target["evidence_path"]:
+                            raise ValueError("Attach sanitized screenshot evidence before completing this step.")
+                        ts = now()
+                        with self.conn:
+                            self.conn.execute(
+                                "UPDATE steps SET completed=1, completed_at=? WHERE ticket_id=? AND step_no=?",
+                                (ts, ticket_id, step_no),
+                            )
+                            self.conn.execute(
+                                "UPDATE tickets SET updated_at=? WHERE ticket_id=?", (ts, ticket_id)
+                            )
+                            self.audit(ticket_id, "STEP_COMPLETED", f"Step {step_no}: {target['step_name']}", commit=False)
+                
+                    def reopen_step(self, ticket_id, step_no):
+                        steps = self.steps(ticket_id)
+                        later_done = [row for row in steps if row["step_no"] > step_no and row["completed"]]
+                        if later_done:
+                            raise ValueError("Reopen later completed steps first to preserve checklist order.")
+                        with self.conn:
+                            self.conn.execute(
+                                "UPDATE steps SET completed=0, completed_at=NULL WHERE ticket_id=? AND step_no=?",
+                                (ticket_id, step_no),
+                            )
+                            self.conn.execute(
+                                "UPDATE tickets SET status='IN_PROGRESS', updated_at=? WHERE ticket_id=?",
+                                (now(), ticket_id),
+                            )
+                            self.audit(ticket_id, "STEP_REOPENED", f"Step {step_no} reopened", commit=False)
+                
