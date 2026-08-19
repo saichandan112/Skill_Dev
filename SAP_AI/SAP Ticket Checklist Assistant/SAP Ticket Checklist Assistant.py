@@ -158,3 +158,19 @@ class Database:
             );
         """)
         self.conn.commit()
+        def get_ticket(self, ticket_id):
+            return self.conn.execute("SELECT * FROM tickets WHERE ticket_id=?", (ticket_id,)).fetchone()
+
+        def create_ticket(self, ticket_id, ticket_type):
+            ts = now()
+            with self.conn:
+                self.conn.execute(
+                    "INSERT INTO tickets VALUES (?, ?, 'IN_PROGRESS', ?, ?)",
+                    (ticket_id, ticket_type, ts, ts),
+                )
+                for number, (name, guidance) in enumerate(CHECKLISTS[ticket_type], 1):
+                    self.conn.execute(
+                        "INSERT INTO steps(ticket_id, step_no, step_name, guidance) VALUES (?, ?, ?, ?)",
+                        (ticket_id, number, name, guidance),
+                    )
+                self.audit(ticket_id, "TICKET_CREATED", f"Ticket created as {ticket_type}", commit=False)
