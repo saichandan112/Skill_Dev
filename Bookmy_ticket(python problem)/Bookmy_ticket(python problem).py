@@ -44,6 +44,8 @@ class Seat:
 # =====================================================
 # Represents a movie by its name.
 # =====================================================
+
+# This dataclass represents a movie with its name.
 @dataclass
 class Movie:
     movie_name: str
@@ -54,6 +56,8 @@ class Movie:
 # =====================================================
 # Represents one show of a movie and its seats.
 # =====================================================
+
+#this class represents a show of a movie and manages its seats. It initializes the show with a movie and creates a seat layout. The display_available_seats method shows only the seats that are still available for booking.
 class Show:
     def __init__(self, movie: Movie):
         self.movie = movie
@@ -79,6 +83,8 @@ class Show:
 # =====================================================
 # Handles booking seats and generating booking IDs.
 # =====================================================
+
+#This class handles the booking of tickets for a show. It checks if the selected seats are valid and available, updates their status to BOOKED, and generates a booking ID for successful bookings.
 class BookingService:
     booking_id = 1
 
@@ -121,6 +127,8 @@ class BookingService:
 # These helper functions keep the menu input logic clean.
 # =====================================================
 
+#This function prompts the user for input until a valid choice is made from the provided list of valid choices.
+
 def choose_option(prompt: str, valid_choices: list[str]) -> str:
     while True:
         choice = input(prompt).strip()
@@ -154,6 +162,7 @@ def parse_seat_ids(seat_input: str) -> list[str]:
 # Entry point for the application.
 # =====================================================
 
+#The main function serves as the entry point for the application. It initializes a list of movies and their corresponding shows, then enters a loop to display the main menu. Users can view available movies, book tickets, or exit the application. The booking process includes selecting a movie, displaying available seats, choosing seats, selecting a payment method, and confirming the booking.
 def main() -> None:
     movies = [Movie("Interstellar"), Movie("Inception"), Movie("Titanic")]
     shows = {movie.movie_name: Show(movie) for movie in movies}
