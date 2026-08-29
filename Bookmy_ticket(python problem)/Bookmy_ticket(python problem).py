@@ -17,7 +17,7 @@ from enum import Enum               #enum is a module that allows you to define 
 # =====================================================
 
 #This Enum class represents the status of a seat in the theatre.
-class SeatStatus(Enum):                 #
+class SeatStatus(Enum):                 #Class SeatStatus inherits from Enum, which means it is an enumeration. An enumeration is a set of symbolic names (members) bound to unique, constant values. In this case, the members are AVAILABLE and BOOKED.
     AVAILABLE = "Available"
     BOOKED = "Booked"
 
@@ -33,7 +33,7 @@ class SeatStatus(Enum):                 #
 # This dataclass represents a seat in the theatre with its ID, price, and status.
 #@dataclass means that the class will automatically generate special methods like __init__() and __repr__() based on the defined attributes.,we use SeatStatus Enum to represent the status of the seat, which can be either AVAILABLE or BOOKED.
 @dataclass
-class Seat:
+class Seat:                         #Class Seat is defined as a dataclass, which means it will automatically generate special methods like __init__() and __repr__() based on the defined attributes.
     seat_id: str
     price: int
     status: SeatStatus = SeatStatus.AVAILABLE
@@ -47,7 +47,7 @@ class Seat:
 
 # This dataclass represents a movie with its name.
 @dataclass
-class Movie:
+class Movie:                        #class Movie is defined as a dataclass, which means it will automatically generate special methods like __init__() and __repr__() based on the defined attributes.
     movie_name: str
 
 
@@ -58,7 +58,7 @@ class Movie:
 # =====================================================
 
 #this class represents a show of a movie and manages its seats. It initializes the show with a movie and creates a seat layout. The display_available_seats method shows only the seats that are still available for booking.
-class Show:
+class Show:                         #Class Show represents a show of a movie and manages its seats. It initializes the show with a movie and creates a seat layout. The display_available_seats method shows only the seats that are still available for booking.
     def __init__(self, movie: Movie):
         self.movie = movie
         self.seats = self._create_seats()
@@ -85,7 +85,7 @@ class Show:
 # =====================================================
 
 #This class handles the booking of tickets for a show. It checks if the selected seats are valid and available, updates their status to BOOKED, and generates a booking ID for successful bookings.
-class BookingService:
+class BookingService:           #Class BookingService handles the booking of tickets for a show. It checks if the selected seats are valid and available, updates their status to BOOKED, and generates a booking ID for successful bookings.
     booking_id = 1
 
     @classmethod
@@ -163,7 +163,7 @@ def parse_seat_ids(seat_input: str) -> list[str]:
 # =====================================================
 
 #The main function serves as the entry point for the application. It initializes a list of movies and their corresponding shows, then enters a loop to display the main menu. Users can view available movies, book tickets, or exit the application. The booking process includes selecting a movie, displaying available seats, choosing seats, selecting a payment method, and confirming the booking.
-def main() -> None:
+def main() -> None:                     #The main function serves as the entry point for the application. It initializes a list of movies and their corresponding shows, then enters a loop to display the main menu. Users can view available movies, book tickets, or exit the application. The booking process includes selecting a movie, displaying available seats, choosing seats, selecting a payment method, and confirming the booking.
     movies = [Movie("Interstellar"), Movie("Inception"), Movie("Titanic")]
     shows = {movie.movie_name: Show(movie) for movie in movies}
 
@@ -209,7 +209,7 @@ def main() -> None:
 # =====================================================
 # ENTRY POINT
 # =====================================================
-if __name__ == "__main__":
+if __name__ == "__main__":      #The entry point of the script checks if the script is being run directly (not imported as a module). If it is, it calls the main() function to start the application.
     main()
 
 #This main function serves as the entry point for the application. 
