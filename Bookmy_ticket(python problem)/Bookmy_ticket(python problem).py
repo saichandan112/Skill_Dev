@@ -6,8 +6,8 @@
 # All comments are preserved and easy to follow.
 # =====================================================
 
-from dataclasses import dataclass
-from enum import Enum
+from dataclasses import dataclass   #Dataclasses are a way to define classes that are primarily used to store data. They automatically generate special methods like __init__() and __repr__() based on the defined attributes.
+from enum import Enum               #enum is a module that allows you to define enumerations, which are a set of symbolic names bound to unique, constant values. In this code, we use Enum to represent the status of a seat (AVAILABLE or BOOKED).
 
 
 # =====================================================
@@ -17,7 +17,7 @@ from enum import Enum
 # =====================================================
 
 #This Enum class represents the status of a seat in the theatre.
-class SeatStatus(Enum):
+class SeatStatus(Enum):                 #
     AVAILABLE = "Available"
     BOOKED = "Booked"
 
