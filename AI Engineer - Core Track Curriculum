@@ -1,95 +1,77 @@
-Course Structure
+# Course Structure
 
+> ### Week 1: Foundations and First Projects
+>
+> • Dive into the fundamentals of Transformers.
+>
+> • Experiment with six leading Frontier Models.
+>
+> • Build your first business Gen AI product that scrapes the web, makes decisions, and creates formatted sales brochures.
 
+<br>
 
-Week 1: Foundations and First Projects
+> ### Week 2: Frontier APIs and Customer Service Chatbots
+>
+> • Explore Frontier APIs and interact with three leading models.
+>
+> • Develop a customer service chatbot with a sharp UI that can interact with text, images, audio, and utilize tools or agents.
 
+<br>
 
+> ### Week 3: Embracing Open-Source Models
+>
+> • Discover the world of Open-Source models using HuggingFace.
+>
+> • Tackle 10 common Gen AI use cases, from translation to image generation.
+>
+> • Build a product to generate meeting minutes and action items from recordings.
 
-• Dive into the fundamentals of Transformers.
+<br>
 
-• Experiment with six leading Frontier Models.
+> ### Week 4: LLM Selection and Code Generation
+>
+> • Understand the differences between LLMs and how to select the best one for your business tasks.
+>
+> • Use LLMs to generate code and build a product that translates code from Python to C++, achieving performance improvements of over 60,000 times.
 
-• Build your first business Gen AI product that scrapes the web, makes decisions, and creates formatted sales brochures.
+<br>
 
+> ### Week 5: Retrieval-Augmented Generation (RAG)
+>
+> • Master RAG to improve the accuracy of your solutions.
+>
+> • Become proficient with vector embeddings and explore vectors in popular open-source vector datastores.
+>
+> • Build a full business solution similar to real products on the market today.
 
+<br>
 
-Week 2: Frontier APIs and Customer Service Chatbots
+> ### Week 6: Transitioning to Training
+>
+> • Move from inference to training.
+>
+> • Fine-tune a Frontier model to solve a real business problem.
+>
+> • Build your own specialized model, marking a significant milestone in your AI journey.
 
+<br>
 
+> ### Week 7: Advanced Training Techniques
+>
+> • Dive into advanced training techniques like QLoRA fine-tuning.
+>
+> • Train an open-source model to outperform Frontier models for specific tasks.
+>
+> • Tackle challenging projects that push your skills to the next level.
 
-• Explore Frontier APIs and interact with three leading models.
+<br>
 
-• Develop a customer service chatbot with a sharp UI that can interact with text, images, audio, and utilize tools or agents.
-
-
-
-Week 3: Embracing Open-Source Models
-
-
-
-• Discover the world of Open-Source models using HuggingFace.
-
-• Tackle 10 common Gen AI use cases, from translation to image generation.
-
-• Build a product to generate meeting minutes and action items from recordings.
-
-
-
-Week 4: LLM Selection and Code Generation
-
-
-
-• Understand the differences between LLMs and how to select the best one for your business tasks.
-
-• Use LLMs to generate code and build a product that translates code from Python to C++, achieving performance improvements of over 60,000 times.
-
-
-
-Week 5: Retrieval-Augmented Generation (RAG)
-
-
-
-• Master RAG to improve the accuracy of your solutions.
-
-• Become proficient with vector embeddings and explore vectors in popular open-source vector datastores.
-
-• Build a full business solution similar to real products on the market today.
-
-
-
-Week 6: Transitioning to Training
-
-
-
-• Move from inference to training.
-
-• Fine-tune a Frontier model to solve a real business problem.
-
-• Build your own specialized model, marking a significant milestone in your AI journey.
-
-
-
-Week 7: Advanced Training Techniques
-
-
-
-• Dive into advanced training techniques like QLoRA fine-tuning.
-
-• Train an open-source model to outperform Frontier models for specific tasks.
-
-• Tackle challenging projects that push your skills to the next level.
-
-
-
-Week 8: Deployment and Finalization
-
-
-
-• Deploy your commercial product to production with a polished UI.
-
-• Enhance capabilities using Agents.
-
-• Deliver your first productionized, agentized, fine-tuned LLM model.
-
-• Celebrate your mastery of AI and LLM engineering, ready for a new phase in your career.
+> ### Week 8: Deployment and Finalization
+>
+> • Deploy your commercial product to production with a polished UI.
+>
+> • Enhance capabilities using Agents.
+>
+> • Deliver your first productionized, agentized, fine-tuned LLM model.
+>
+> • Celebrate your mastery of AI and LLM engineering, ready for a new phase in your career.
