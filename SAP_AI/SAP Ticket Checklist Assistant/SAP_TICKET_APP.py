@@ -422,13 +422,20 @@ class TicketAssistant(tk.Tk):
         report_path = safe_ticket_folder(self.ticket_id) / "report" / f"{self.ticket_id}_analysis.html"
         step_sections = []
         for row in steps:
-            evidence = row["evidence_path"] or "Not attached"
+            if row["evidence_path"] and Path(row["evidence_path"]).exists():
+                evidence_html = f"""
+                    <p><b>Evidence Screenshot:</b></p>
+                    {Path(row['evidence_path']).as_uri()}
+                """
+            else:
+                evidence_html = "<p><b>Evidence:</b> Not Attached</p>"
+
             step_sections.append(f"""
                 <h2>Step {row['step_no']}: {html.escape(row['step_name'])}</h2>
                 <p><b>Status:</b> Completed</p>
                 <p><b>Completed:</b> {html.escape(row['completed_at'] or '')}</p>
                 <p><b>Guidance:</b> {html.escape(row['guidance'])}</p>
-                <p><b>Evidence:</b> {html.escape(str(evidence))}</p>
+                {evidence_html}
             """)
         audit_rows = "".join(
             f"<tr><td>{e['event_id']}</td><td>{html.escape(e['event_at'])}</td><td>{html.escape(e['event_type'])}</td><td>{html.escape(e['details'])}</td></tr>"
